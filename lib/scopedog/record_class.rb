@@ -16,8 +16,9 @@ module Scopedog
       name = call_params[0]
       obj = YARD::CodeObjects::MethodObject.new(namespace, name, :class)
       obj.docstring.add_tag ScopeTag.new(name)
-      obj.group = 'Scopes'
       register obj
+      register_group obj, 'Scopes'
+      register_docstring obj, statement.comments
     end
   end
 
@@ -29,8 +30,9 @@ module Scopedog
       [:with_deleted, :without_deleted, :only_deleted].each do |name|
         obj = YARD::CodeObjects::MethodObject.new(namespace, name, :class)
         obj.docstring.add_tag ScopeTag.new(name)
-        obj.group = 'Scopes'
         register obj
+        register_group obj, 'Scopes'
+        register_docstring obj, statement.comments
       end
     end
   end
