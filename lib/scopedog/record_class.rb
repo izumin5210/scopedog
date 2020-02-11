@@ -2,6 +2,39 @@ require 'yard'
 require 'active_record'
 
 module Scopedog
+  class ScopeTag < YARD::Tags::Tag
+    def initialize(name)
+      super('scope', '', nil, name)
+    end
+  end
+
+  class ScopeHandler < YARD::Handlers::Ruby::MethodHandler
+    handles method_call(:scope)
+    namespace_only
+
+    process do
+      name = call_params[0]
+      obj = YARD::CodeObjects::MethodObject.new(namespace, name, :class)
+      obj.docstring.add_tag ScopeTag.new(name)
+      obj.group = 'Scopes'
+      register obj
+    end
+  end
+
+  class ParanoiaHandler < YARD::Handlers::Ruby::MethodHandler
+    handles method_call(:acts_as_paranoid)
+    namespace_only
+
+    process do
+      [:with_deleted, :without_deleted, :only_deleted].each do |name|
+        obj = YARD::CodeObjects::MethodObject.new(namespace, name, :class)
+        obj.docstring.add_tag ScopeTag.new(name)
+        obj.group = 'Scopes'
+        register obj
+      end
+    end
+  end
+
   # @attr_reader yard_obj [YARD::CodeObjects::ClassObject]
   # @attr_reader ar_class [Class<ActiveRecord::Base>]
   class RecordClass
