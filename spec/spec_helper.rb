@@ -1,5 +1,7 @@
 require "bundler/setup"
 require "scopedog"
+require 'forwardable' # HACK: supress NameError in rspec-cheki
+require 'rspec/cheki'
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
