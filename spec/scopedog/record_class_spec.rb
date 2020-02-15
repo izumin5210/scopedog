@@ -13,6 +13,12 @@ RSpec.describe Scopedog::RecordClass do
       t.boolean :registered
       t.boolean :deleted
     end
+    m.create_table :admin_logs do |t|
+      t.integer :user_id
+      t.boolean :checked
+      t.string :data
+      t.datetime :created_at
+    end
   end
 
   after do
@@ -35,19 +41,32 @@ RSpec.describe Scopedog::RecordClass do
         # Lists registered users.
         scope :registered, -> { where(registered: true) }
       end
+
+      module self::Admin
+        def self.table_name_prefix
+          'admin_'
+        end
+      end
+
+      class self::Admin::Log < self::ApplicationRecord
+        # @!scoping unchecked
+        # List operation logs that has not checked yet
+        scope :unchecked, -> { where(checked: false) }
+      end
     RUBY
   end
 
   before do
     self.class.instance_eval ruby_source
-    YARD.parse_string ruby_source
+    YARD.parse_string ruby_source.gsub(/self::/, "")
   end
   after { YARD::Registry.clear }
 
   let(:record_classes) { Scopedog::RecordClass.all(root_const: self.class) }
-  let(:user_record_class) { record_classes[0] }
+  let(:user_record_class) { record_classes.find { |rc| rc.table_name == 'users' } }
+  let(:admin_log_record_class) { record_classes.find { |rc| rc.table_name == 'admin_logs' } }
 
-  it { expect(record_classes.size).to eq 1 }
+  it { expect(record_classes.size).to eq 2 }
 
   describe '#default_sql' do
     it "includes default scope" do
@@ -62,17 +81,16 @@ RSpec.describe Scopedog::RecordClass do
   end
 
   describe '#scopes' do
-    let(:scopes) { user_record_class.scopes }
-
     [
-      { summary: 'simple scope', names: [:registered] },
-      { summary: 'defined by paranoia gem', names: [:only_deleted, :without_deleted, :with_deleted] },
-    ].each do |summary:, names:|
+      { summary: 'simple scope', record_class: :user, names: [:registered] },
+      { summary: 'defined by paranoia gem', record_class: :user, names: [:only_deleted, :without_deleted, :with_deleted] },
+      { summary: 'namespaced record class', record_class: :admin_log, names: [:unchecked] },
+    ].each do |summary:, record_class:, names:|
       context summary do
         names.each do |name|
           describe "#sql for #{name} scope" do
             it "returns a SQL string defined in a scope" do
-              scope = scopes.find { |s| s.name == name }
+              scope = send(:"#{record_class}_record_class").scopes.find { |s| s.name == name }
               expect(scope).to be_present
               expect(scope.sql).to match_snapshot
             end

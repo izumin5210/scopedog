@@ -11,21 +11,22 @@ module Scopedog
     def self.all(docs: YARD::Registry.all, root_const: Object)
       docs
         .select { |d| d.type == :class }
-        .map { |d| [d, root_const.const_get(d.name)] }
+        .map { |d| [d, root_const.const_get(d.path)] }
         .select { |(_, c)| c.ancestors.include?(ActiveRecord::Base) && !c.abstract_class? }
-        .map { |d, c| RecordClass.new(d, c) }
+        .map { |d, c| RecordClass.new(d, c, root_const: root_const) }
     end
 
     # @param yard_obj [YARD::CodeObjects::ClassObject]
     # @param ar_class [Class<ActiveRecord::Base>]
-    def initialize(yard_obj, ar_class)
+    def initialize(yard_obj, ar_class, root_const: Object)
       @yard_obj = yard_obj
       @ar_class = ar_class
+      @root_const = root_const
     end
 
     # @return [String]
     def name
-      yard_obj.name
+      ar_class.name.gsub(/^#{@root_const.name}::/, '')
     end
 
     # @return [String]
