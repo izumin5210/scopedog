@@ -33,6 +33,7 @@ RSpec.describe Scopedog::Exporters::MarkdownExporter do
         self.abstract_class = true
       end
 
+      # @!record
       class self::User < self::ApplicationRecord
         # @!paranoid deleted
         acts_as_paranoid column: :deleted, sentinel_value: false
@@ -48,6 +49,7 @@ RSpec.describe Scopedog::Exporters::MarkdownExporter do
         end
       end
 
+      # @!record
       class self::Admin::Log < self::ApplicationRecord
         # @!scoping unchecked
         # List operation logs that has not checked yet

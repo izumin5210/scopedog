@@ -10,7 +10,8 @@ module Scopedog
     # @return [Array<RecordClass>]
     def self.all(docs: YARD::Registry.all, root_const: Object)
       docs
-        .select { |d| d.type == :class }
+        .select { |d| d.type == :class && d.has_tag?(:record) }
+        .each { |d| require_relative d.file if d.file != '(stdin)' }
         .map { |d| [d, root_const.const_get(d.path)] }
         .select { |(_, c)| c.ancestors.include?(ActiveRecord::Base) && !c.abstract_class? }
         .map { |d, c| RecordClass.new(d, c, root_const: root_const) }
