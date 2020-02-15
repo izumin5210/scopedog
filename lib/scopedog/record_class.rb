@@ -136,6 +136,11 @@ module Scopedog
       ar_class.all.to_sql
     end
 
+    # @return [String]
+    def unscoped_sql
+      ar_class.all.unscoped.to_sql
+    end
+
     # @attr_reader record_class [Scopedog::RecordClass]
     # @attr_reader yard_obj [YARD::CodeObjects::MethodObject]
     class Scope

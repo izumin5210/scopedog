@@ -55,6 +55,12 @@ RSpec.describe Scopedog::RecordClass do
     end
   end
 
+  describe '#unscoped_sql' do
+    it "does not include default scope" do
+      expect(user_record_class.unscoped_sql).to match_snapshot
+    end
+  end
+
   describe '#scopes' do
     let(:scopes) { user_record_class.scopes }
 
