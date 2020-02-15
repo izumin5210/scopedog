@@ -31,6 +31,7 @@ Gem::Specification.new do |spec|
 
   rails_versions = ['>= 5.2', '< 6.1']
   spec.add_runtime_dependency 'activerecord', rails_versions
+  spec.add_runtime_dependency 'activesupport', rails_versions
   spec.add_runtime_dependency 'yard', '~> 0.9'
   spec.add_runtime_dependency 'thor', '~> 1.0'
 
