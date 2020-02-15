@@ -124,6 +124,21 @@ module Scopedog
       @ar_class = ar_class
     end
 
+    # @return [String]
+    def name
+      yard_obj.name
+    end
+
+    # @return [String]
+    def docstring
+      yard_obj.docstring
+    end
+
+    # @return [String]
+    def table_name
+      ar_class.table_name
+    end
+
     # @return [Array<YARD::CodeObjects::MethodObject>]
     def scopes
       @scopes ||= yard_obj.meths

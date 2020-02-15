@@ -1,0 +1,17 @@
+---
+"./spec/scopedog/exporters/markdown_exporter_spec.rb[1:2:1]": |
+  # User
+  User represents an user entity of this application.
+
+  ```sql
+  -- default scope
+  SELECT "users".* FROM "users"
+  ```
+
+  ## Scopes
+  ### `registered`
+  Lists registered users.
+
+  ```sql
+  SELECT "users".* FROM "users" WHERE "users"."registered" = 1
+  ```
