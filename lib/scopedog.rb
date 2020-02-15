@@ -1,8 +1,16 @@
 require "scopedog/version"
-require "scopedog/record_class"
-require "scopedog/exporters/markdown_exporter"
 
 module Scopedog
   class Error < StandardError; end
-  # Your code goes here...
+
+  def self.logger
+    @logger ||= ActiveSupport::TaggedLogging.new(ActiveSupport::Logger.new(STDOUT))
+  end
+
+  def self.logger=(logger)
+    @logger = logger
+  end
 end
+
+require "scopedog/record_class"
+require "scopedog/exporters/markdown_exporter"

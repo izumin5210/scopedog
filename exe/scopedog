@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+
+require "scopedog/cli"
+
+Scopedog::CLI.start(ARGV)
