@@ -28,8 +28,10 @@ RSpec.describe Scopedog::RecordClass do
       end
 
       class self::User < self::ApplicationRecord
+        # @!paranoid deleted
         acts_as_paranoid column: :deleted, sentinel_value: false
 
+        # @!scoping registered
         # Lists registered users.
         scope :registered, -> { where(registered: true) }
       end
