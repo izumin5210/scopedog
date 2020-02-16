@@ -18,7 +18,7 @@ module Scopedog::Exporters
       dir = File.join(dir, destination[:prefix]) if destination[:prefix]
 
       if name.include? '/'
-        name, prefix = name.split('/').then { |p| [p[-1], p[0..-2]] }
+        name, prefix = name.split('/').yield_self { |p| [p[-1], p[0..-2]] }
         dir = File.join(dir, prefix)
       end
 
