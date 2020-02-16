@@ -16,3 +16,9 @@ require "yard"
 require "scopedog/directives"
 require "scopedog/record_class"
 require "scopedog/exporters/markdown_exporter"
+
+begin
+  require "scopedog/railtie"
+rescue LoadError
+  # no-op
+end
