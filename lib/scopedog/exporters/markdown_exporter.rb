@@ -40,6 +40,7 @@ module Scopedog::Exporters
           f.puts "## Scopes"
 
           record_class.scopes.each do |s|
+            f.puts
             f.puts <<~MARKDOWN
               ### `#{s.name}`
               #{s.docstring}

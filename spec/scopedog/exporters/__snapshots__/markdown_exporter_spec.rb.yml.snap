@@ -9,24 +9,28 @@
   ```
 
   ## Scopes
+
   ### `only_deleted`
 
 
   ```sql
   SELECT "users".* FROM "users" WHERE (users."deleted" IS NULL OR users."deleted" != 0)
   ```
+
   ### `with_deleted`
 
 
   ```sql
   SELECT "users".* FROM "users"
   ```
+
   ### `without_deleted`
 
 
   ```sql
   SELECT "users".* FROM "users" WHERE "users"."deleted" = 0 AND "users"."deleted" = 0
   ```
+
   ### `registered`
   Lists registered users.
 
@@ -43,6 +47,7 @@
   ```
 
   ## Scopes
+
   ### `unchecked`
   List operation logs that has not checked yet
 
