@@ -38,6 +38,11 @@ module Scopedog
     private
 
     def prepare
+      if defined? Rails
+        load './config/application.rb'
+        Rails.application.eager_load!
+        Scopedog.logger = Rails.logger
+      end
       Scopedog.logger.level = options[:verbose] ? Logger::DEBUG : Logger::WARN
     end
   end
