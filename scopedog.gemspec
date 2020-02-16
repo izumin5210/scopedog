@@ -34,9 +34,9 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'activesupport', rails_versions
   spec.add_runtime_dependency 'yard', '~> 0.9'
   spec.add_runtime_dependency 'thor', '~> 1.0'
+  spec.add_runtime_dependency "rake", "~> 10.0"
 
   spec.add_development_dependency "bundler", "~> 2.0"
-  spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec", "~> 3.0"
   spec.add_development_dependency "onkcop", "~> 0.53"
   spec.add_development_dependency "sqlite3", "~> 1.4"
