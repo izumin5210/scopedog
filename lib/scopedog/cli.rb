@@ -9,6 +9,9 @@ module Scopedog
     option :to, type: :string, required: true
     option :dest, type: :hash, default: {}
     def export(path = nil)
+      exporter_class = Scopedog::Exporters.const_get(:"#{options[:to].camelize}Exporter")
+      exporter = exporter_class.new(options[:dest])
+
       unless path
         if defined? Rails
           path = Rails.root.join('app', 'models', '**', '*.rb').to_s
@@ -17,13 +20,14 @@ module Scopedog
         end
       end
 
+      Scopedog.logger.debug "Parsing #{path}"
       YARD.parse path
 
-      exporter_class = Scopedog::Exporters.const_get(:"#{options[:to].camelize}Exporter")
-      exporter = exporter_class.new(options[:dest])
+      record_classes = Scopedog::RecordClass.all
+      Scopedog.logger.debug "#{record_classes.size} record classes are found"
 
-      Scopedog::RecordClass.all.each do |record_class|
-        logger.debug "Export #{record_class.name}"
+      record_classes.each do |record_class|
+        Scopedog.logger.debug "Export #{record_class.name}"
         exporter.export(record_class)
       end
     end
